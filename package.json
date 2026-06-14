@@ -1,0 +1,19 @@
+{
+  "name": "shared-expenses-app",
+  "version": "1.0.0",
+  "description": "Shared expenses app with CSV import anomaly reporting.",
+  "main": "src/server.js",
+  "scripts": {
+    "dev": "node --watch src/server.js",
+    "start": "node src/server.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "better-sqlite3": "^11.10.0",
+    "cookie-session": "^2.1.0",
+    "csv-parse": "^5.6.0",
+    "express": "^4.21.2",
+    "multer": "^2.1.1"
+  }
+}
