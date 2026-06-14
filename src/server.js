@@ -1,4 +1,5 @@
 const fs = require('fs');
+const os = require('os');
 const path = require('path');
 const express = require('express');
 const multer = require('multer');
@@ -11,7 +12,11 @@ const { parseMoneyToCents, formatInr, toInrCents } = require('./money');
 
 const app = express();
 const db = openDatabase();
-const upload = multer({ dest: path.join(__dirname, '..', 'uploads') });
+const uploadDir = process.env.VERCEL
+  ? path.join(os.tmpdir(), 'shared-expenses-uploads')
+  : path.join(__dirname, '..', 'uploads');
+fs.mkdirSync(uploadDir, { recursive: true });
+const upload = multer({ dest: uploadDir });
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '..', 'public')));
@@ -435,7 +440,11 @@ function todayIso() {
   return new Date().toISOString().slice(0, 10);
 }
 
-const port = Number(process.env.PORT || 3000);
-app.listen(port, () => {
-  console.log(`Shared Expenses app listening at http://localhost:${port}`);
-});
+if (require.main === module) {
+  const port = Number(process.env.PORT || 3000);
+  app.listen(port, () => {
+    console.log(`Shared Expenses app listening at http://localhost:${port}`);
+  });
+}
+
+module.exports = app;

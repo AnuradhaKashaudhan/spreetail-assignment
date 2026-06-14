@@ -40,12 +40,27 @@ Built with OpenAI Codex as the primary development collaborator. See `AI_USAGE.m
 
 ## Deployment
 
-This repository is ready for a Node host such as Render, Railway, Fly.io, or a VM.
+This repository is ready for a Node host such as Render, Railway, Fly.io, Vercel, or a VM.
 
 Set:
 
 - `PORT`
 - `SESSION_SECRET`
 - Optional `DB_PATH`
+
+### Vercel With Ephemeral SQLite
+
+This app intentionally keeps SQLite. On Vercel, the database and upload temp files are written to `/tmp` because Vercel Functions expose the project filesystem as read-only and only `/tmp` is writable at runtime.
+
+That means data is not durable on Vercel. It may survive while a function instance stays warm, but it can disappear after cold starts, redeploys, or instance replacement. This is acceptable for the assignment/demo mode if you do not need persistence.
+
+Deploy:
+
+```bash
+npm i -g vercel
+vercel --prod
+```
+
+Set `SESSION_SECRET` in Vercel project settings. Do not set `DB_PATH` unless you point it to another writable temporary path.
 
 The current workspace does not include deployment credentials, so the public app URL must be filled in after deploying.
